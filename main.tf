@@ -40,13 +40,9 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_route_table_association" "pub01" {
-  subnet_id      = aws_subnet.pub01.id
-  route_table_id = aws_route_table.public.id
-}
-
-resource "aws_route_table_association" "pub02" {
-  subnet_id      = aws_subnet.pub02.id
+resource "aws_route_table_association" "this" {
+  count = floor(length(var.snet_cidr_block_list) / 2)
+  subnet_id      = aws_subnet.this[count.index].id
   route_table_id = aws_route_table.public.id
 }
 
@@ -101,7 +97,7 @@ resource "aws_instance" "web" {
   ami           = data.aws_ami.amz_linux_2.id
   instance_type = "t3.micro"
   key_name = var.keyName
-  subnet_id = aws_subnet.pub01.id
+  subnet_id = aws_subnet.this[0].id
   associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.main.id]
   tags = {
