@@ -14,7 +14,7 @@ resource "aws_subnet" "this" {
   count = length(var.snet_cidr_block_list)
   vpc_id     = aws_vpc.main.id
   cidr_block = var.snet_cidr_block_list[count.index]
-  availability_zone = data.aws_availability_zones.this[count.index % 2 == 0 ? 0 : 1]
+  availability_zone = data.aws_availability_zones.this.names[count.index % 2 == 0 ? 0 : 1]
   tags = {
     Name = "snet-tf-0${count.index}"
   }

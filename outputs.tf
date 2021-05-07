@@ -7,3 +7,7 @@ output "public_ip" {
   value = aws_instance.web.public_ip
   sensitive = true
 }
+
+output "subnet_ids" {
+  value = aws_subnet.this[*].id
+}
